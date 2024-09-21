@@ -1,0 +1,27 @@
+service: microservice-name
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  environment:
+    NODE_ENV: ${env:NODE_ENV}
+    LATEX_PATH: ${env:LATEX_PATH}
+
+functions:
+  latexConverter:
+    handler: dist/infrastructure/lambda.handler
+    events:
+      - http:
+          path: latex/convert
+          method: post
+          cors: true
+
+package:
+  exclude:
+    - node_modules/**
+    - .env
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
